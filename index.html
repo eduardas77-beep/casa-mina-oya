@@ -537,6 +537,16 @@ body{font-family:"Nunito",sans-serif;background:#FFF7F0;color:var(--tx);min-heig
       <button class="btn-sc" style="margin-top:.65rem" onclick="abrirAddRecado()">+ Registrar recado do guia</button>
     </div>
 
+    <div class="sec-t">📆 Histórico Anual</div>
+    <div class="card">
+      <div class="card-t" id="hist-ano-titulo">2025</div>
+      <div class="hist-toggle">
+        <button class="hist-tab ativo" onclick="mostrarHist('mens',this)">💰 Mensalidades</button>
+        <button class="hist-tab" onclick="mostrarHist('velas',this)">🕯️ Material (Velas)</button>
+      </div>
+      <div id="hist-grid-content"></div>
+    </div>
+
     <div class="sec-t">🔔 Notificações</div>
     <div class="card">
       <div class="card-t">Preferências</div>
@@ -752,9 +762,13 @@ function toggleMens(){
   ud.mensalidade=!ud.mensalidade;
   document.getElementById("tog-mens").textContent=ud.mensalidade?"✅":"❌";
   document.getElementById("pf-mens").textContent=ud.mensalidade?"✅":"❌";
+  // Sincronizar com histórico anual
+  if(!ud.histMens)ud.histMens={};
+  ud.histMens[`${anoAtual}-${mesAtual}`]=ud.mensalidade;
   const m=membros.find(x=>x.login===usuarioLogado.login);
   if(m){m.mensalidade=ud.mensalidade;renderMembros(membros);}
   atualizarResumo();
+  if(document.getElementById("hist-grid-content").innerHTML)mostrarHist(histTipo,null);
   toast(ud.mensalidade?"✅ Mensalidade marcada como paga!":"❌ Mensalidade desmarcada");
 }
 function toggleMat(){
@@ -762,9 +776,13 @@ function toggleMat(){
   ud.material=!ud.material;
   document.getElementById("tog-mat").textContent=ud.material?"✅":"❌";
   document.getElementById("pf-mat").textContent=ud.material?"✅":"❌";
+  // Sincronizar com histórico anual
+  if(!ud.histVelas)ud.histVelas={};
+  ud.histVelas[`${anoAtual}-${mesAtual}`]=ud.material;
   const m=membros.find(x=>x.login===usuarioLogado.login);
   if(m){m.material=ud.material;renderMembros(membros);}
   atualizarResumo();
+  if(document.getElementById("hist-grid-content").innerHTML)mostrarHist(histTipo,null);
   toast(ud.material?"🕯️ Material marcado como entregue!":"❌ Material desmarcado");
 }
 
@@ -1009,8 +1027,28 @@ function abrirMembro(login){
   document.getElementById("ov-adm-mb").classList.add("aberto");
 }
 
-function admTogMens(login){const m=membros.find(x=>x.login===login);if(!m)return;m.mensalidade=!m.mensalidade;if(usuarios[login])usuarios[login].mensalidade=m.mensalidade;abrirMembro(login);renderMembros(membros);atualizarResumo();atualizarAdmStats();toast(m.mensalidade?"✅ Pago":"❌ Desmarcado");}
-function admTogMat(login){const m=membros.find(x=>x.login===login);if(!m)return;m.material=!m.material;if(usuarios[login])usuarios[login].material=m.material;abrirMembro(login);renderMembros(membros);atualizarResumo();toast(m.material?"🕯️ Entregue":"❌ Desmarcado");}
+function admTogMens(login){
+  const m=membros.find(x=>x.login===login);if(!m)return;
+  m.mensalidade=!m.mensalidade;
+  if(usuarios[login]){
+    usuarios[login].mensalidade=m.mensalidade;
+    if(!usuarios[login].histMens)usuarios[login].histMens={};
+    usuarios[login].histMens[`${anoAtual}-${mesAtual}`]=m.mensalidade;
+  }
+  abrirMembro(login);renderMembros(membros);atualizarResumo();atualizarAdmStats();
+  toast(m.mensalidade?"✅ Pago":"❌ Desmarcado");
+}
+function admTogMat(login){
+  const m=membros.find(x=>x.login===login);if(!m)return;
+  m.material=!m.material;
+  if(usuarios[login]){
+    usuarios[login].material=m.material;
+    if(!usuarios[login].histVelas)usuarios[login].histVelas={};
+    usuarios[login].histVelas[`${anoAtual}-${mesAtual}`]=m.material;
+  }
+  abrirMembro(login);renderMembros(membros);atualizarResumo();
+  toast(m.material?"🕯️ Entregue":"❌ Desmarcado");
+}
 function admRem(login){membros=membros.filter(x=>x.login!==login);delete usuarios[login];renderMembros(membros);X("ov-adm-mb");atualizarResumo();atualizarAdmStats();toast("🗑️ Membro removido");}
 function admAddObrig(login){const nm=prompt("Nome da obrigação:");if(!nm)return;const dt=prompt("Prazo:")||"A definir";const ug=confirm("É urgente?");if(!usuarios[login])return;usuarios[login].obrigacoes.push({nm,dt,urgente:ug});toast("🔮 Obrigação adicionada!");abrirMembro(login);}
 function admAddRecado(login){const g=prompt("Guia / Entidade:")||"Guia";const tx=prompt("Recado:");if(!tx)return;if(!usuarios[login])return;usuarios[login].recados.unshift(`<div class="rec-de">✨ ${g}</div>${tx}`);toast("💌 Recado registrado!");abrirMembro(login);}
@@ -1027,8 +1065,10 @@ function renderEventos(){
       ${e.material?`<div class="ev-mb"><div class="ev-mt2">🛍️ O que levar</div><div class="ev-ml2">${e.material.replace(/
 /g,"<br>")}</div></div>`:""}
       ${e.presentes.length?`<div class="pr-w">${e.presentes.map(p=>`<span class="pr-t">✓ ${p}</span>`).join("")}</div>`:""}
+      ${(e.ausentes&&e.ausentes.length)?`<div class="pr-w">${e.ausentes.map(p=>`<span style="font-size:.56rem;padding:.1rem .38rem;border-radius:20px;background:#FEE2E2;color:#B91C1C;border:1px solid #FCA5A5">✗ ${p}</span>`).join("")}</div>`:""}
       <div style="margin-top:.48rem;display:flex;gap:.38rem">
-        <button style="flex:1;padding:.4rem;border-radius:8px;border:none;background:var(--vm);color:white;font-size:.65rem;font-weight:700;cursor:pointer;font-family:'Cinzel',serif" onclick="confEv(${i},this)">✓ Confirmar Presença</button>
+        <button style="flex:1;padding:.4rem;border-radius:8px;border:none;background:var(--vm);color:white;font-size:.65rem;font-weight:700;cursor:pointer;font-family:'Cinzel',serif" onclick="confEv(${i},this)">✓ Confirmar</button>
+        <button style="flex:1;padding:.4rem;border-radius:8px;border:1px solid rgba(185,28,28,.25);background:white;color:var(--vm);font-size:.65rem;font-weight:700;cursor:pointer;font-family:'Cinzel',serif" onclick="naoVai(${i},this)">✗ Não posso</button>
         ${modoAdm?`<button style="padding:.38rem .55rem;border-radius:8px;border:1px solid rgba(180,83,9,.18);background:white;color:var(--ou);font-size:.65rem;cursor:pointer" onclick="remEv(${i})">🗑️</button>`:""}
       </div>
     </div>`).join("");
@@ -1053,14 +1093,46 @@ function renderHomeEvento(){
 }
 function confEv(i,btn){
   const nm=usuarioLogado?usuarioLogado.nome.split(" ")[0]:"Você";
-  if(!eventos[i].presentes.includes(nm)){eventos[i].presentes.push(nm);const ud=usuarios[usuarioLogado.login];if(ud){ud.presencas=(ud.presencas||0)+1;document.getElementById("pf-pres").textContent=ud.presencas;}const m=membros.find(x=>x.login===usuarioLogado.login);if(m)m.presencas=(m.presencas||0)+1;}
+  if(!eventos[i].presentes.includes(nm)){
+    eventos[i].presentes.push(nm);
+    if(!eventos[i].ausentes)eventos[i].ausentes=[];
+    eventos[i].ausentes=eventos[i].ausentes.filter(x=>x!==nm);
+    const ud=usuarios[usuarioLogado.login];if(ud){ud.presencas=(ud.presencas||0)+1;document.getElementById("pf-pres").textContent=ud.presencas;}
+    const m=membros.find(x=>x.login===usuarioLogado.login);if(m)m.presencas=(m.presencas||0)+1;
+  }
   btn.textContent="✓ Confirmado!";btn.style.background="#16A34A";btn.disabled=true;
-  renderEventos();renderPresUser();renderHomeEvento();toast("🙏 Presença confirmada! Axé!");
+  renderEventos();renderPresUser();renderHomeEvento();atualizarResumo();toast("🙏 Presença confirmada! Axé!");
+}
+function naoVai(i,btn){
+  const nm=usuarioLogado?usuarioLogado.nome.split(" ")[0]:"Você";
+  if(!eventos[i].ausentes)eventos[i].ausentes=[];
+  if(!eventos[i].ausentes.includes(nm))eventos[i].ausentes.push(nm);
+  eventos[i].presentes=eventos[i].presentes.filter(x=>x!==nm);
+  btn.textContent="✗ Registrado";btn.style.background="rgba(185,28,28,.15)";btn.style.color="var(--vm)";btn.disabled=true;
+  renderEventos();renderPresUser();renderHomeEvento();atualizarResumo();toast("📝 Registrado que você não poderá comparecer.");
 }
 function confEvHome(btn){
   const nm=usuarioLogado?usuarioLogado.nome.split(" ")[0]:"Você";
-  if(eventos.length&&!eventos[0].presentes.includes(nm)){eventos[0].presentes.push(nm);const ud=usuarios[usuarioLogado.login];if(ud){ud.presencas=(ud.presencas||0)+1;document.getElementById("pf-pres").textContent=ud.presencas;}}
-  btn.textContent="✓ Confirmado!";btn.style.background="#15803D";btn.disabled=true;toast("🙏 Presença confirmada! Axé!");
+  if(eventos.length&&!eventos[0].presentes.includes(nm)){
+    eventos[0].presentes.push(nm);
+    if(eventos[0].ausentes)eventos[0].ausentes=eventos[0].ausentes.filter(x=>x!==nm);
+    const ud=usuarios[usuarioLogado.login];if(ud){ud.presencas=(ud.presencas||0)+1;document.getElementById("pf-pres").textContent=ud.presencas;}
+    const m=membros.find(x=>x.login===usuarioLogado.login);if(m)m.presencas=(m.presencas||0)+1;
+  }
+  btn.textContent="✓ Confirmado!";btn.style.background="#15803D";btn.disabled=true;
+  const btnNao=btn.nextElementSibling;if(btnNao){btnNao.textContent="✗ Não posso";btnNao.style.background="rgba(255,255,255,.1)";btnNao.disabled=false;}
+  toast("🙏 Presença confirmada! Axé!");
+}
+function naoVaiHome(btn){
+  const nm=usuarioLogado?usuarioLogado.nome.split(" ")[0]:"Você";
+  if(eventos.length){
+    if(!eventos[0].ausentes)eventos[0].ausentes=[];
+    if(!eventos[0].ausentes.includes(nm))eventos[0].ausentes.push(nm);
+    eventos[0].presentes=eventos[0].presentes.filter(x=>x!==nm);
+  }
+  btn.textContent="✗ Registrado";btn.style.background="rgba(220,38,38,.3)";btn.style.color="white";btn.disabled=true;
+  const btnSim=btn.previousElementSibling;if(btnSim){btnSim.textContent="✓ Confirmar";btnSim.style.background="#F59E0B";btnSim.disabled=false;}
+  renderHomeEvento();toast("📝 Registrado que você não poderá comparecer.");
 }
 function remEv(i){eventos.splice(i,1);renderEventos();renderHomeEvento();atualizarResumo();toast("🗑️ Evento removido");}
 function abrirAddEvento(){
@@ -1186,6 +1258,81 @@ function atualizarResumo(){
   document.getElementById("res-mens").textContent=`${pg} / ${membros.length}`;
   document.getElementById("res-mat").textContent=`${mt} / ${membros.length}`;
   document.getElementById("res-ev").textContent=eventos.length;
+  // Atualizar dashboard card de evento
+  renderHomeEvento();
+}
+
+// Histórico anual de mensalidades e velas
+let histTipo="mens";
+const MESES_CURTOS=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+const anoAtual=new Date().getFullYear();
+const mesAtual=new Date().getMonth();
+
+function initHistorico(){
+  const ud=usuarios[usuarioLogado.login];
+  if(!ud)return;
+  if(!ud.histMens)ud.histMens={};
+  if(!ud.histVelas)ud.histVelas={};
+  // Mês atual reflete o estado atual
+  const chave=`${anoAtual}-${mesAtual}`;
+  ud.histMens[chave]=ud.mensalidade;
+  ud.histVelas[chave]=ud.material;
+  mostrarHist(histTipo,null);
+}
+
+function mostrarHist(tipo,btnEl){
+  histTipo=tipo;
+  document.querySelectorAll(".hist-tab").forEach(b=>b.classList.remove("ativo"));
+  if(btnEl)btnEl.classList.add("ativo");
+  else{const tabs=document.querySelectorAll(".hist-tab");if(tipo==="mens")tabs[0].classList.add("ativo");else tabs[1].classList.add("ativo");}
+  const ud=usuarios[usuarioLogado.login];
+  if(!ud)return;
+  document.getElementById("hist-ano-titulo").textContent=`📅 Histórico ${anoAtual}`;
+  const hist=tipo==="mens"?(ud.histMens||{}):(ud.histVelas||{});
+  const chaveAtual=`${anoAtual}-${mesAtual}`;
+  // Sincronizar mês atual
+  if(tipo==="mens")hist[chaveAtual]=ud.mensalidade;
+  else hist[chaveAtual]=ud.material;
+  let html="<div class='hist-grid'>";
+  for(let m=0;m<12;m++){
+    const chave=`${anoAtual}-${m}`;
+    const futuro=m>mesAtual;
+    const pago=hist[chave]===true;
+    const classe=futuro?"fut":pago?"ok":"pend";
+    const ico=futuro?"·":pago?"✅":"❌";
+    html+=`<div class="hist-mes ${classe}" onclick="${!futuro?`toggleHistMes('${chave}','${tipo}',this)`:''}">
+      <div class="hist-mes-nm">${MESES_CURTOS[m]}</div>
+      <div class="hist-ico">${ico}</div>
+    </div>`;
+  }
+  html+="</div>";
+  html+=`<div style="margin-top:.55rem;font-size:.68rem;color:var(--ts);text-align:center;font-style:italic">Toque em um mês para marcar/desmarcar</div>`;
+  document.getElementById("hist-grid-content").innerHTML=html;
+}
+
+function toggleHistMes(chave,tipo,el){
+  const ud=usuarios[usuarioLogado.login];if(!ud)return;
+  if(tipo==="mens"){
+    if(!ud.histMens)ud.histMens={};
+    ud.histMens[chave]=!ud.histMens[chave];
+    // Se for o mês atual, atualizar estado principal também
+    const [a,m]=chave.split("-").map(Number);
+    if(a===anoAtual&&m===mesAtual){ud.mensalidade=ud.histMens[chave];document.getElementById("tog-mens").textContent=ud.mensalidade?"✅":"❌";document.getElementById("pf-mens").textContent=ud.mensalidade?"✅":"❌";}
+    const ok=ud.histMens[chave];
+    el.className=`hist-mes ${ok?"ok":"pend"}`;
+    el.querySelector(".hist-ico").textContent=ok?"✅":"❌";
+    if(a===anoAtual&&m===mesAtual){const mb=membros.find(x=>x.login===usuarioLogado.login);if(mb)mb.mensalidade=ok;renderMembros(membros);atualizarResumo();}
+  } else {
+    if(!ud.histVelas)ud.histVelas={};
+    ud.histVelas[chave]=!ud.histVelas[chave];
+    const [a,m]=chave.split("-").map(Number);
+    if(a===anoAtual&&m===mesAtual){ud.material=ud.histVelas[chave];document.getElementById("tog-mat").textContent=ud.material?"✅":"❌";document.getElementById("pf-mat").textContent=ud.material?"✅":"❌";}
+    const ok=ud.histVelas[chave];
+    el.className=`hist-mes ${ok?"ok":"pend"}`;
+    el.querySelector(".hist-ico").textContent=ok?"✅":"❌";
+    if(a===anoAtual&&m===mesAtual){const mb=membros.find(x=>x.login===usuarioLogado.login);if(mb)mb.material=ok;renderMembros(membros);atualizarResumo();}
+  }
+  toast("✅ Histórico atualizado!");
 }
 function atualizarAdmStats(){
   const a=document.getElementById("adm-aprov");if(a)a.textContent=membros.length;
@@ -1199,7 +1346,10 @@ function ir(t){
   document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("ativo"));
   document.getElementById("tela-"+t).classList.add("ativa");
   const nb=document.getElementById("nav-"+t);if(nb)nb.classList.add("ativo");
-  if(t==="perfil"&&usuarioLogado&&!modoAdm)renderPresUser();
+  if(t==="perfil"&&usuarioLogado){
+    if(!modoAdm)renderPresUser();
+    if(!modoAdm&&usuarios[usuarioLogado.login])initHistorico();
+  }
   window.scrollTo(0,0);
 }
 
