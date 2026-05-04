@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Casa de Mina • Oyá e Ogum</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* PALETA OYÁ */
+  --vermelho:       #B91C1C;
+  --vermelho-vivo:  #DC2626;
+  --vermelho-escuro:#7F1D1D;
+  --vermelho-suave: #FEE2E2;
+  --ouro:           #B45309;
+  --ouro-vivo:      #D97706;
+  --ouro-brilho:    #F59E0B;
+  --ouro-claro:     #FDE68A;
+  --branco:         #FFFBF5;
+  --branco-puro:    #FFFFFF;
+  --creme:          #FEF3C7;
+  --creme-escuro:   #FCD34D;
+  --cinza-quente:   #78716C;
+  --texto:          #1C0A00;
+  --texto-suave:    #57534E;
+
+  /* GRADIENTES */
+  --grad-oya:  linear-gradient(135deg, #7F1D1D 0%, #B91C1C 50%, #7F1D1D 100%);
+  --grad-ouro: linear-gradient(135deg, #92400E, #F59E0B, #92400E);
+  --grad-topo: linear-gradient(180deg, #7F1D1D 0%, #991B1B 100%);
+  --grad-card: linear-gradient(135deg, rgba(255,251,245,0.97), rgba(254,243,199,0.95));
+  --sombra:    0 4px 24px rgba(127,29,29,0.18);
+  --sombra-lg: 0 8px 40px rgba(127,29,29,0.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #FFF7F0;
+  color: var(--texto);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SPLASH ── */
+#splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--grad-topo);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.7s, visibility 0.7s;
+}
+#splash.hide { opacity:0; visibility:hidden; }
+
+.splash-chama { font-size: 4.5rem; animation: chamar 2s infinite ease-in-out; }
+@keyframes chamar {
+  0%,100% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 12px rgba(245,158,11,0.5)); }
+  50%      { transform: scale(1.12) rotate(3deg); filter: drop-shadow(0 0 30px rgba(245,158,11,0.9)); }
+}
+.splash-titulo {
+  font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 900;
+  color: var(--ouro-claro); text-align: center; margin-top: 1.2rem;
+  letter-spacing: 0.06em; text-shadow: 0 2px 20px rgba(245,158,11,0.5);
+}
+.splash-sub {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  color: rgba(255,255,255,0.75); font-size: 1rem; margin-top: 0.4rem;
+}
+.splash-bar-wrap {
+  margin-top: 2.5rem; width: 140px; height: 3px;
+  background: rgba(255,255,255,0.15); border-radius: 10px; overflow: hidden;
+}
+.splash-bar {
+  height: 100%; width: 0; border-radius: 10px;
+  background: var(--grad-ouro); animation: load 2s forwards ease-in-out;
+}
+@keyframes load { to { width: 100%; } }
+
+/* ── LOGIN ── */
+#tela-login {
+  display: none; min-height: 100vh;
+  background: linear-gradient(170deg, #7F1D1D 0%, #991B1B 40%, #B91C1C 100%);
+  align-items: center; justify-content: center; flex-direction: column; padding: 2rem;
+}
+#tela-login.ativo { display: flex; }
+
+.login-logo { font-size: 3.5rem; margin-bottom: 0.5rem; animation: chamar 3s infinite ease-in-out; }
+.login-titulo {
+  font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700;
+  color: var(--ouro-claro); text-align: center; margin-bottom: 0.3rem;
+}
+.login-sub {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 2rem;
+}
+.login-box {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 20px; padding: 1.8rem; width: 100%; max-width: 340px;
+  backdrop-filter: blur(10px);
+}
+.login-label {
+  font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.12em;
+  color: var(--ouro-brilho); text-transform: uppercase; margin-bottom: 0.4rem;
+  display: block;
+}
+.login-input {
+  width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 10px; padding: 0.75rem 1rem; color: white;
+  font-family: 'Nunito', sans-serif; font-size: 0.9rem; outline: none; margin-bottom: 1rem;
+}
+.login-input::placeholder { color: rgba(255,255,255,0.35); }
+.login-input:focus { border-color: var(--ouro-brilho); }
+.btn-login {
+  width: 100%; background: var(--grad-ouro); color: var(--texto);
+  border: none; border-radius: 12px; padding: 0.9rem;
+  font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.1em; cursor: pointer; transition: all 0.2s;
+}
+.btn-login:active { transform: scale(0.97); }
+.login-hint {
+  text-align: center; margin-top: 1.2rem; font-size: 0.72rem;
+  color: rgba(255,255,255,0.4); font-style: italic;
+}
+.login-hint strong { color: var(--ouro-brilho); }
+
+/* ── APP WRAPPER ── */
+#app { display: none; min-height: 100vh; padding-bottom: 80px; }
+#app.ativo { display: block; }
+
+/* ── TOP BAR ── */
+.top-bar {
+  background: var(--grad-topo);
+  border-bottom: 2px solid rgba(245,158,11,0.5);
+  padding: 0.9rem 1.2rem;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 0.8rem;
+  box-shadow: var(--sombra);
+}
+.tb-icon { font-size: 1.5rem; }
+.tb-texts { flex: 1; }
+.tb-nome {
+  font-family: 'Cinzel', serif; font-size: 0.82rem; font-weight: 700;
+  color: var(--ouro-claro); letter-spacing: 0.08em;
+}
+.tb-sub { font-size: 0.68rem; color: rgba(255,255,255,0.55); font-style: italic; }
+.tb-user {
+  background: var(--grad-ouro); color: var(--texto);
+  border: none; border-radius: 50%; width: 36px; height: 36px;
+  font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.85rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.adm-badge {
+  font-size: 0.55rem; font-weight: 800; letter-spacing: 0.1em;
+  background: var(--grad-ouro); color: var(--texto);
+  padding: 0.1rem 0.45rem; border-radius: 20px; font-family: 'Cinzel', serif;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--branco); border-top: 2px solid rgba(180,83,9,0.2);
+  display: flex; z-index: 100;
+  box-shadow: 0 -4px 20px rgba(127,29,29,0.1);
+}
+.nav-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 0.55rem 0.2rem; background: none; border: none;
+  cursor: pointer; color: #A8A29E;
+  font-size: 0.58rem; font-family: 'Cinzel', serif;
+  font-weight: 600; letter-spacing: 0.04em; gap: 0.15rem;
+  transition: all 0.25s; border-top: 2px solid transparent;
+}
+.nav-btn .ni { font-size: 1.35rem; transition: all 0.25s; }
+.nav-btn.ativo { color: var(--vermelho); border-top-color: var(--vermelho); }
+.nav-btn.ativo .ni { transform: translateY(-2px); }
+
+/* ── TELAS ── */
+.tela { display: none; animation: surgir 0.35s ease; }
+.tela.ativa { display: block; }
+@keyframes surgir {
+  from { opacity:0; transform: translateY(6px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--grad-card);
+  border: 1px solid rgba(180,83,9,0.15);
+  border-radius: 18px; padding: 1.2rem;
+  margin: 0.7rem 1rem;
+  box-shadow: var(--sombra);
+}
+.card-titulo {
+  font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: 700;
+  color: var(--vermelho); letter-spacing: 0.14em; text-transform: uppercase;
+  margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.card-titulo::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(185,28,28,0.3), transparent);
+}
+.secao-titulo {
+  font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.14em;
+  color: var(--vermelho); text-transform: uppercase;
+  padding: 0.8rem 1rem 0.2rem; opacity: 0.85;
+}
+.info-linha {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.45rem 0; border-bottom: 1px solid rgba(180,83,9,0.08);
+}
+.info-linha:last-child { border-bottom: none; }
+.info-chave { font-size: 0.76rem; color: var(--texto-suave); }
+.info-valor { font-size: 0.8rem; color: var(--texto); font-weight: 700; text-align: right; }
+.info-valor.ok    { color: #16A34A; }
+.info-valor.pend  { color: #D97706; }
+.info-valor.alert { color: var(--vermelho); }
+
+/* ── HOME BANNER ── */
+.home-banner {
+  background: var(--grad-topo);
+  padding: 2rem 1.2rem 1.8rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+.home-banner::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0; right: 0; height: 24px;
+  background: #FFF7F0; clip-path: ellipse(55% 100% at 50% 100%);
+}
+.hb-chama { font-size: 3rem; animation: chamar 3s infinite ease-in-out; }
+.hb-titulo {
+  font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 900;
+  color: var(--ouro-claro); margin: 0.5rem 0 0.2rem;
+  text-shadow: 0 2px 15px rgba(245,158,11,0.4); line-height: 1.3;
+}
+.hb-religiao {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  color: rgba(255,255,255,0.65); font-size: 0.88rem;
+}
+.hb-saudacao {
+  margin-top: 0.8rem; font-size: 0.82rem; color: rgba(255,255,255,0.8);
+}
+.hb-saudacao strong { color: var(--ouro-claro); font-weight: 700; }
+
+/* ── GRID RÁPIDO ── */
+.grid-rapido {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+  padding: 0 1rem; margin-top: 0.5rem;
+}
+.btn-rapido {
+  background: white; border: 1px solid rgba(180,83,9,0.15);
+  border-radius: 16px; padding: 1rem 0.8rem; text-align: center;
+  cursor: pointer; transition: all 0.25s; box-shadow: var(--sombra);
+}
+.btn-rapido:active { transform: scale(0.96); box-shadow: none; }
+.br-icon { font-size: 1.8rem; margin-bottom: 0.35rem; }
+.br-label {
+  font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: 700;
+  color: var(--vermelho); letter-spacing: 0.04em;
+}
+.br-desc { font-size: 0.6rem; color: var(--cinza-quente); margin-top: 0.15rem; }
+
+/* ── EVENTO CARD ── */
+.evento-home {
+  background: linear-gradient(135deg, #7F1D1D, #991B1B);
+  border: none; color: white;
+}
+.ev-badge {
+  display: inline-block; font-family: 'Cinzel', serif;
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em;
+  background: rgba(245,158,11,0.2); color: var(--ouro-claro);
+  border: 1px solid rgba(245,158,11,0.35); padding: 0.15rem 0.5rem;
+  border-radius: 20px; margin-bottom: 0.5rem;
+}
+.ev-nome {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: white;
+}
+.ev-data { font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-top: 0.25rem; }
+.ev-material {
+  margin-top: 0.7rem; background: rgba(255,255,255,0.08);
+  border-radius: 8px; padding: 0.6rem 0.8rem;
+}
+.ev-material-titulo { font-size: 0.62rem; font-weight: 700; color: var(--ouro-claro); font-family:'Cinzel',serif; letter-spacing:0.08em; margin-bottom: 0.3rem; }
+.ev-material-lista { font-size: 0.75rem; color: rgba(255,255,255,0.8); line-height: 1.7; }
+.ev-btns { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
+.ev-btn {
+  flex: 1; padding: 0.55rem; border-radius: 10px; border: none;
+  font-size: 0.72rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; letter-spacing: 0.03em; transition: all 0.2s;
+}
+.ev-sim { background: var(--ouro-brilho); color: #1C0A00; }
+.ev-nao { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.2); }
+
+/* ── MÃE CARD ── */
+.mae-card {
+  background: white; border: 2px solid rgba(180,83,9,0.2);
+}
+.mae-topo { display: flex; gap: 1rem; align-items: center; }
+.mae-foto {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--grad-topo); display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; border: 3px solid var(--ouro-brilho);
+  box-shadow: 0 0 15px rgba(245,158,11,0.3); flex-shrink: 0;
+}
+.mae-nome { font-family:'Cinzel',serif; font-size:0.92rem; color:var(--vermelho); font-weight:700; }
+.mae-cargo { font-size:0.65rem; color:var(--cinza-quente); text-transform:uppercase; letter-spacing:0.1em; margin-top:0.15rem; }
+.mae-guia  { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.82rem; color:var(--ouro); margin-top:0.2rem; }
+.mae-frase {
+  margin-top: 0.9rem; font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size: 0.92rem; color: var(--texto-suave); line-height: 1.6;
+  border-left: 3px solid var(--vermelho); padding-left: 0.9rem;
+}
+
+/* ── BADGES ── */
+.badge {
+  font-size: 0.55rem; font-weight: 700; padding: 0.15rem 0.45rem;
+  border-radius: 20px; letter-spacing: 0.06em; font-family: 'Cinzel', serif;
+}
+.b-ok    { background:#DCFCE7; color:#16A34A; border:1px solid #86EFAC; }
+.b-pend  { background:#FEF9C3; color:#A16207; border:1px solid #FDE047; }
+.b-alert { background:#FEE2E2; color:var(--vermelho); border:1px solid #FCA5A5; }
+
+/* ── FILHOS ── */
+.barra-busca { padding: 0.8rem 1rem; display: flex; gap: 0.6rem; }
+.input-busca {
+  flex: 1; background: white; border: 1.5px solid rgba(180,83,9,0.2);
+  border-radius: 12px; padding: 0.65rem 1rem; color: var(--texto);
+  font-family: 'Nunito', sans-serif; font-size: 0.85rem; outline: none;
+  box-shadow: 0 2px 8px rgba(127,29,29,0.07);
+}
+.input-busca:focus { border-color: var(--vermelho); }
+.btn-add {
+  background: var(--vermelho); color: white; border: none; border-radius: 12px;
+  width: 44px; height: 44px; font-size: 1.3rem; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(185,28,28,0.3); transition: all 0.2s;
+}
+.btn-add:active { transform: scale(0.93); }
+
+.filho-card {
+  background: white; border: 1.5px solid rgba(180,83,9,0.12);
+  border-radius: 16px; padding: 1rem; margin: 0 1rem 0.7rem;
+  display: flex; align-items: center; gap: 0.9rem;
+  cursor: pointer; transition: all 0.25s; box-shadow: 0 2px 12px rgba(127,29,29,0.07);
+}
+.filho-card:active { transform: scale(0.98); border-color: var(--vermelho); }
+.fc-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-shrink: 0;
+  border: 2px solid rgba(180,83,9,0.2);
+}
+.fc-nome { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:var(--texto); }
+.fc-guia { font-size:0.68rem; color:var(--cinza-quente); margin-top:0.05rem; }
+.fc-badges { display:flex; gap:0.3rem; flex-wrap:wrap; margin-top:0.4rem; }
+.fc-seta { color: rgba(180,83,9,0.3); font-size: 1rem; }
+
+/* ── MODAL ── */
+.overlay {
+  position:fixed; inset:0; background:rgba(28,10,0,0.65);
+  z-index:500; display:flex; align-items:flex-end;
+  opacity:0; visibility:hidden; transition:all 0.3s;
+}
+.overlay.aberto { opacity:1; visibility:visible; }
+.modal {
+  background: var(--branco); border-top: 2px solid var(--vermelho);
+  border-radius: 24px 24px 0 0; width: 100%; max-height: 92vh;
+  overflow-y: auto; transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  padding-bottom: 2rem;
+}
+.overlay.aberto .modal { transform: translateY(0); }
+.modal-drag {
+  width: 40px; height: 4px; background: rgba(180,83,9,0.2);
+  border-radius: 10px; margin: 0.8rem auto 0;
+}
+.modal-head {
+  padding: 1rem 1.2rem 0.8rem; display: flex; align-items: center; gap: 0.9rem;
+  border-bottom: 1px solid rgba(180,83,9,0.12);
+}
+.modal-av {
+  width: 56px; height: 56px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.7rem; border: 2px solid rgba(180,83,9,0.25);
+}
+.modal-nm { font-family:'Cinzel',serif; font-size:1rem; color:var(--vermelho); }
+.modal-gua { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.82rem; color:var(--cinza-quente); }
+.modal-fechar {
+  margin-left:auto; background:rgba(185,28,28,0.08); border:none;
+  border-radius:50%; width:32px; height:32px; font-size:1rem;
+  color:var(--vermelho); cursor:pointer;
+}
+.modal-body { padding: 0 1rem; }
+.modal-sec {
+  background: white; border: 1px solid rgba(180,83,9,0.12);
+  border-radius: 14px; padding: 1rem; margin-top: 0.9rem;
+}
+.modal-sec-titulo {
+  font-family:'Cinzel',serif; font-size:0.65rem; color:var(--vermelho);
+  letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.75rem;
+  display:flex; align-items:center; gap:0.4rem;
+}
+.modal-sec-titulo::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg, rgba(185,28,28,0.2), transparent);
+}
+.toggle-btn {
+  background:none; border:none; cursor:pointer; font-size:1.2rem; transition:all 0.2s;
+}
+.toggle-btn:active { transform:scale(0.88); }
+
+.recado-box {
+  background: var(--vermelho-suave); border-radius:10px; padding:0.75rem 0.9rem;
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.88rem; color:var(--vermelho-escuro); line-height:1.55;
+  border-left: 3px solid var(--vermelho);
+}
+.recado-de { font-family:'Cinzel',serif; font-size:0.6rem; color:var(--vermelho); letter-spacing:0.1em; margin-bottom:0.3rem; }
+
+/* ── CALENDÁRIO ── */
+.cal-header { display:flex; align-items:center; justify-content:space-between; padding:0.9rem 1rem; }
+.cal-mes-nome { font-family:'Cinzel',serif; font-size:1rem; font-weight:700; color:var(--vermelho); }
+.cal-nav-btn {
+  background:white; border:1.5px solid rgba(180,83,9,0.2); border-radius:8px;
+  padding:0.3rem 0.7rem; color:var(--vermelho); cursor:pointer; font-size:0.85rem;
+}
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:0.25rem; padding:0 1rem; }
+.cal-dn {
+  text-align:center; font-size:0.58rem; font-weight:700;
+  color:var(--cinza-quente); padding:0.3rem 0; font-family:'Cinzel',serif;
+}
+.cal-d {
+  aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+  border-radius:8px; font-size:0.78rem; font-weight:600; color:var(--texto);
+  cursor:pointer; position:relative; transition:all 0.2s;
+}
+.cal-d:empty { cursor:default; }
+.cal-d.hoje { background:var(--vermelho); color:white; }
+.cal-d.tem { background:rgba(185,28,28,0.08); }
+.cal-d.tem::after {
+  content:''; position:absolute; bottom:2px; width:4px; height:4px;
+  border-radius:50%; background:var(--ouro-brilho);
+}
+.cal-d:not(:empty):not(.hoje):hover { background:rgba(185,28,28,0.1); }
+.ev-item {
+  border-left:3px solid; padding:0.85rem 1rem;
+  margin:0.5rem 1rem; background:white;
+  border-radius:0 12px 12px 0;
+  box-shadow:0 2px 10px rgba(127,29,29,0.07); cursor:pointer; transition:all 0.2s;
+}
+.ev-item:active { transform:scale(0.98); }
+.ev-item.gira     { border-color:var(--vermelho); }
+.ev-item.festa    { border-color:var(--ouro-brilho); }
+.ev-item.obrigacao{ border-color:#7C3AED; }
+.ev-item.reuniao  { border-color:#0891B2; }
+.ev-tipo { font-size:0.58rem; font-weight:700; letter-spacing:0.1em; font-family:'Cinzel',serif; margin-bottom:0.2rem; }
+.ev-item.gira      .ev-tipo { color:var(--vermelho); }
+.ev-item.festa     .ev-tipo { color:var(--ouro); }
+.ev-item.obrigacao .ev-tipo { color:#7C3AED; }
+.ev-item.reuniao   .ev-tipo { color:#0891B2; }
+.ev-nm { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:var(--texto); }
+.ev-inf { font-size:0.7rem; color:var(--cinza-quente); margin-top:0.15rem; }
+.ev-mat-box { margin-top:0.5rem; background:rgba(180,83,9,0.06); border-radius:8px; padding:0.5rem 0.7rem; }
+.ev-mat-titulo { font-size:0.58rem; font-weight:700; color:var(--ouro); font-family:'Cinzel',serif; letter-spacing:0.08em; margin-bottom:0.2rem; }
+.ev-mat-lista { font-size:0.72rem; color:var(--texto-suave); line-height:1.6; }
+.presencas-wrap { display:flex; gap:0.35rem; flex-wrap:wrap; margin-top:0.5rem; }
+.pr-tag { font-size:0.6rem; padding:0.12rem 0.45rem; border-radius:20px; background:#DCFCE7; color:#16A34A; border:1px solid #86EFAC; }
+
+/* ── CASA ── */
+.casa-banner {
+  background: var(--grad-topo); margin:0.8rem 1rem;
+  border-radius:18px; padding:1.5rem; text-align:center; position:relative; overflow:hidden;
+  box-shadow: var(--sombra-lg);
+}
+.casa-banner::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(245,158,11,0.2) 0%, transparent 65%);
+}
+.cb-titulo { font-family:'Cinzel',serif; font-size:1rem; font-weight:900; color:var(--ouro-claro); margin-bottom:0.3rem; }
+.cb-desc { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.85rem; color:rgba(255,255,255,0.65); line-height:1.5; }
+.proj-item {
+  background:white; border:1px solid rgba(180,83,9,0.12);
+  border-radius:14px; padding:0.9rem 1rem; margin:0.5rem 1rem;
+  display:flex; gap:0.8rem; align-items:flex-start;
+  box-shadow:0 2px 10px rgba(127,29,29,0.06);
+}
+.proj-icon { font-size:1.35rem; flex-shrink:0; margin-top:0.1rem; }
+.proj-nm { font-family:'Cormorant Garamond',serif; font-size:0.95rem; font-weight:600; color:var(--texto); margin-bottom:0.2rem; }
+.proj-desc { font-size:0.7rem; color:var(--cinza-quente); line-height:1.4; }
+.proj-prog { margin-top:0.5rem; height:5px; background:#F5F5F4; border-radius:10px; overflow:hidden; }
+.proj-barra { height:100%; border-radius:10px; background:linear-gradient(90deg,var(--vermelho),var(--ouro-brilho)); }
+.proj-pct { font-size:0.6rem; color:var(--ouro); margin-top:0.25rem; font-weight:700; }
+
+/* ── MENSAGENS ── */
+.msg-card {
+  background:white; border:1px solid rgba(180,83,9,0.12);
+  border-radius:16px; padding:1rem; margin:0 1rem 0.7rem;
+  cursor:pointer; transition:all 0.25s; box-shadow:0 2px 10px rgba(127,29,29,0.07);
+}
+.msg-card:active { border-color:var(--vermelho); }
+.msg-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.4rem; }
+.msg-autor { font-family:'Cinzel',serif; font-size:0.72rem; color:var(--vermelho); letter-spacing:0.05em; }
+.msg-data  { font-size:0.65rem; color:var(--cinza-quente); }
+.msg-titulo{ font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:var(--texto); margin-bottom:0.25rem; }
+.msg-prev  { font-size:0.76rem; color:var(--texto-suave); line-height:1.45; }
+.msg-tag   { display:inline-block; margin-top:0.4rem; font-size:0.58rem; padding:0.12rem 0.45rem; border-radius:20px; font-family:'Cinzel',serif; letter-spacing:0.07em; font-weight:700; }
+.mt-aviso     { background:#FEF9C3; color:#A16207; border:1px solid #FDE047; }
+.mt-esp       { background:#F3E8FF; color:#7C3AED; border:1px solid #C4B5FD; }
+.mt-geral     { background:#DBEAFE; color:#1D4ED8; border:1px solid #93C5FD; }
+
+/* ── PERFIL ── */
+.perfil-banner {
+  background: var(--grad-topo); padding:2rem 1.2rem 1.5rem; text-align:center;
+  border-bottom:1px solid rgba(180,83,9,0.2);
+}
+.pb-avatar {
+  width:80px; height:80px; border-radius:50%;
+  background:var(--grad-ouro); display:flex; align-items:center; justify-content:center;
+  font-size:2.5rem; margin:0 auto 0.9rem;
+  border:3px solid white; box-shadow:0 0 20px rgba(245,158,11,0.3);
+}
+.pb-nome { font-family:'Cinzel',serif; font-size:1.1rem; color:white; margin-bottom:0.2rem; }
+.pb-guia { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.88rem; color:rgba(255,255,255,0.65); }
+.pb-stats {
+  display:flex; background:rgba(255,255,255,0.1); border-radius:12px;
+  overflow:hidden; border:1px solid rgba(255,255,255,0.15); margin-top:1rem;
+}
+.pb-stat { flex:1; text-align:center; padding:0.6rem 0.4rem; border-right:1px solid rgba(255,255,255,0.1); }
+.pb-stat:last-child { border-right:none; }
+.pb-stat-n { font-family:'Cinzel',serif; font-size:1.05rem; color:var(--ouro-claro); font-weight:700; }
+.pb-stat-l { font-size:0.58rem; color:rgba(255,255,255,0.5); }
+
+.obrig-item {
+  display:flex; align-items:center; gap:0.75rem;
+  padding:0.75rem 0; border-bottom:1px solid rgba(180,83,9,0.08);
+}
+.obrig-item:last-child { border:none; }
+.obrig-icon { font-size:1.25rem; flex-shrink:0; }
+.obrig-nm { font-family:'Cormorant Garamond',serif; font-size:0.92rem; font-weight:600; color:var(--texto); flex:1; }
+.obrig-data{ font-size:0.68rem; color:var(--cinza-quente); }
+.obrig-urgente .obrig-nm { color:var(--vermelho); }
+.obrig-urgente .obrig-data { color:var(--vermelho); }
+
+/* ── FORM ── */
+.form-wrap { padding:0 1rem; }
+.f-label { font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.12em; color:var(--vermelho); text-transform:uppercase; display:block; margin-bottom:0.3rem; }
+.f-input, .f-select, .f-textarea {
+  width:100%; background:white; border:1.5px solid rgba(180,83,9,0.18);
+  border-radius:10px; padding:0.7rem 1rem; color:var(--texto);
+  font-family:'Nunito',sans-serif; font-size:0.85rem; margin-bottom:0.75rem; outline:none;
+}
+.f-input:focus, .f-select:focus, .f-textarea:focus { border-color:var(--vermelho); }
+.f-textarea { resize:none; height:80px; }
+.f-select option { background:white; color:var(--texto); }
+.btn-salvar {
+  width:100%; background:var(--grad-oya); color:white;
+  border:none; border-radius:13px; padding:0.9rem;
+  font-family:'Cinzel',serif; font-size:0.85rem; font-weight:700;
+  letter-spacing:0.1em; cursor:pointer; transition:all 0.2s;
+}
+.btn-salvar:active { transform:scale(0.97); }
+.btn-secund {
+  width:100%; background:transparent; color:var(--vermelho);
+  border:1.5px solid rgba(185,28,28,0.3); border-radius:13px; padding:0.85rem;
+  font-family:'Cinzel',serif; font-size:0.8rem; font-weight:700;
+  letter-spacing:0.1em; cursor:pointer; margin-top:0.6rem; transition:all 0.2s;
+}
+.btn-secund:active { transform:scale(0.97); }
+
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(16px);
+  background:var(--texto); color:var(--ouro-claro);
+  border:1px solid rgba(245,158,11,0.4); border-radius:20px;
+  padding:0.6rem 1.3rem; font-size:0.8rem; z-index:700;
+  opacity:0; transition:all 0.3s; pointer-events:none; white-space:nowrap;
+  font-family:'Nunito',sans-serif; font-weight:700;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── ADM ONLY ── */
+.adm-only { display:none; }
+.modo-adm .adm-only { display:block; }
+.modo-adm .adm-flex { display:flex !important; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(185,28,28,0.2); border-radius:4px; }
+
+.modal-titulo-bar {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1rem 1.2rem; border-bottom:1px solid rgba(180,83,9,0.12);
+  font-family:'Cinzel',serif; font-size:0.88rem; color:var(--vermelho); font-weight:700;
+}
+
+/* Separador visual */
+.div-linha { height:1px; background:rgba(180,83,9,0.1); margin:0.5rem 1rem; }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-chama">🔥</div>
+  <div class="splash-titulo">Casa de Mina Jêjê Nagô<br>Oyá e Ogum</div>
+  <div class="splash-sub">Tambor de Mina</div>
+  <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
+</div>
+
+<!-- LOGIN -->
+<div id="tela-login">
+  <div class="login-logo">🌪️</div>
+  <div class="login-titulo">Casa de Mina Jêjê Nagô<br>Oyá e Ogum</div>
+  <div class="login-sub">Tambor de Mina</div>
+  <div class="login-box">
+    <label class="login-label">Seu nome / e-mail</label>
+    <input class="login-input" id="login-user" type="text" placeholder="Nome ou e-mail">
+    <label class="login-label">Senha</label>
+    <input class="login-input" id="login-pass" type="password" placeholder="Senha">
+    <button class="btn-login" onclick="fazerLogin()">⚡ Entrar na Casa</button>
+    <div class="login-hint">
+      ADM: <strong>mae</strong> / <strong>oya2025</strong><br>
+      Filho: <strong>maria</strong> / <strong>filho123</strong>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="tb-icon">🔥</div>
+    <div class="tb-texts">
+      <div class="tb-nome">Casa de Mina Jêjê Nagô</div>
+      <div class="tb-sub">Oyá e Ogum • Tambor de Mina</div>
+    </div>
+    <span class="adm-badge adm-only" id="adm-badge" style="display:none">ADM</span>
+    <button class="tb-user" id="tb-inicial" onclick="navegarPara('perfil')">M</button>
+  </div>
+
+  <!-- HOME -->
+  <div class="tela ativa" id="tela-home">
+    <div class="home-banner">
+      <div class="hb-chama">🌪️</div>
+      <div class="hb-titulo">Casa de Mina Jêjê Nagô<br>Oyá e Ogum</div>
+      <div class="hb-religiao">Tambor de Mina</div>
+      <div class="hb-saudacao">Salve, <strong id="saud-nome">Filha de Santo</strong>! Que Oyá te proteja sempre. 🙏</div>
+    </div>
+
+    <div class="secao-titulo" style="margin-top:0.8rem">⚡ Acesso Rápido</div>
+    <div class="grid-rapido">
+      <div class="btn-rapido" onclick="navegarPara('filhos')">
+        <div class="br-icon">👥</div>
+        <div class="br-label">Filhos de Santo</div>
+        <div class="br-desc">Membros da casa</div>
+      </div>
+      <div class="btn-rapido" onclick="navegarPara('calendario')">
+        <div class="br-icon">📅</div>
+        <div class="br-label">Calendário</div>
+        <div class="br-desc">Giras e eventos</div>
+      </div>
+      <div class="btn-rapido" onclick="navegarPara('mensagens')">
+        <div class="br-icon">📢</div>
+        <div class="br-label">Mural</div>
+        <div class="br-desc">Comunicados</div>
+      </div>
+      <div class="btn-rapido" onclick="navegarPara('casa')">
+        <div class="br-icon">🏛️</div>
+        <div class="br-label">A Casa</div>
+        <div class="br-desc">Projetos e metas</div>
+      </div>
+    </div>
+
+    <div class="secao-titulo" style="margin-top:0.5rem">📅 Próxima Gira</div>
+    <div class="card evento-home">
+      <div class="ev-badge">EM BREVE</div>
+      <div class="ev-nome">Gira de Oyá • Festa dos Ventos</div>
+      <div class="ev-data">📍 Terreiro da Casa • Sábado, 17 de Maio • 20h00</div>
+      <div class="ev-material">
+        <div class="ev-material-titulo">🛍️ O que levar</div>
+        <div class="ev-material-lista">
+          🌸 Flores roxas ou vermelhas<br>
+          🕯️ Velas brancas (pelo menos 2)<br>
+          👗 Roupa branca para a gira<br>
+          🍷 Oferenda de vinho tinto (opcional)
+        </div>
+      </div>
+      <div class="ev-btns">
+        <button class="ev-btn ev-sim" onclick="confirmarPresenca(this)">✓ Confirmar Presença</button>
+        <button class="ev-btn ev-nao">✗ Não posso</button>
+      </div>
+    </div>
+
+    <div class="secao-titulo">🌹 Palavra de Oyá — Mãe Iracilda</div>
+    <div class="card mae-card">
+      <div class="mae-topo">
+        <div class="mae-foto">🌹</div>
+        <div>
+          <div class="mae-nome">Mãe Iracilda de Oyá</div>
+          <div class="mae-cargo">Zeladora • Mãe de Santo</div>
+          <div class="mae-guia">Filha de Oyá, Guardiã desta Casa</div>
+        </div>
+      </div>
+      <div class="mae-frase">
+        "Oyá está sobre esta casa, sobre cada filho. Mantenham o coração puro, a fé acesa e o respeito entre si. O vento que leva também traz. Confiem nos Encantados. Axé! 🌪️"
+      </div>
+    </div>
+
+    <div class="secao-titulo">📊 Resumo — Maio 2025</div>
+    <div class="card">
+      <div class="card-titulo">🕯️ Situação do Mês</div>
+      <div class="info-linha"><span class="info-chave">💰 Mensalidades pagas</span><span class="info-valor ok">8 / 12</span></div>
+      <div class="info-linha"><span class="info-chave">🕯️ Velas doadas</span><span class="info-valor pend">7 / 12</span></div>
+      <div class="info-linha"><span class="info-chave">📅 Giras em maio</span><span class="info-valor">3 giras</span></div>
+      <div class="info-linha"><span class="info-chave">✅ Confirmaram presença</span><span class="info-valor ok">10 filhos</span></div>
+    </div>
+  </div>
+
+  <!-- FILHOS -->
+  <div class="tela" id="tela-filhos">
+    <div class="barra-busca">
+      <input class="input-busca" type="text" placeholder="Buscar filho de santo..." oninput="filtrarFilhos(this.value)">
+      <button class="btn-add adm-only" style="display:none" onclick="abrirAddFilho()">+</button>
+    </div>
+    <div class="secao-titulo" id="titulo-filhos">👥 Filhos da Casa</div>
+    <div id="lista-filhos"></div>
+  </div>
+
+  <!-- CALENDÁRIO -->
+  <div class="tela" id="tela-calendario">
+    <div class="cal-header">
+      <button class="cal-nav-btn">‹</button>
+      <div class="cal-mes-nome">Maio 2025</div>
+      <button class="cal-nav-btn">›</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-dn">DOM</div><div class="cal-dn">SEG</div><div class="cal-dn">TER</div>
+      <div class="cal-dn">QUA</div><div class="cal-dn">QUI</div><div class="cal-dn">SEX</div><div class="cal-dn">SÁB</div>
+      <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+      <div class="cal-d">1</div><div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d tem">4</div>
+      <div class="cal-d">5</div><div class="cal-d">6</div><div class="cal-d">7</div>
+      <div class="cal-d">8</div><div class="cal-d">9</div><div class="cal-d">10</div><div class="cal-d tem">11</div>
+      <div class="cal-d">12</div><div class="cal-d">13</div><div class="cal-d">14</div>
+      <div class="cal-d hoje">15</div><div class="cal-d">16</div><div class="cal-d">17</div><div class="cal-d tem">18</div>
+      <div class="cal-d">19</div><div class="cal-d">20</div><div class="cal-d">21</div>
+      <div class="cal-d">22</div><div class="cal-d">23</div><div class="cal-d tem">24</div><div class="cal-d">25</div>
+      <div class="cal-d">26</div><div class="cal-d">27</div><div class="cal-d">28</div>
+      <div class="cal-d">29</div><div class="cal-d">30</div><div class="cal-d">31</div><div class="cal-d"></div>
+    </div>
+
+    <div class="secao-titulo" style="margin-top:1rem">📋 Próximos Eventos</div>
+    <div id="lista-eventos"></div>
+
+    <div style="padding:0 1rem; margin-top:0.5rem;" class="adm-only">
+      <button class="btn-secund" onclick="abrirAddEvento()">+ Adicionar Evento</button>
+    </div>
+  </div>
+
+  <!-- A CASA -->
+  <div class="tela" id="tela-casa">
+    <div class="casa-banner">
+      <div style="font-size:2.5rem;margin-bottom:0.5rem">🌪️🔥</div>
+      <div class="cb-titulo">Casa de Mina Jêjê Nagô<br>Oyá e Ogum</div>
+      <div class="cb-desc">Tambor de Mina • Com amor, fé e axé dos Encantados</div>
+    </div>
+
+    <div class="secao-titulo">🌹 Zeladora da Casa</div>
+    <div class="card mae-card">
+      <div class="mae-topo">
+        <div class="mae-foto">🌹</div>
+        <div>
+          <div class="mae-nome">Mãe Iracilda de Oyá</div>
+          <div class="mae-cargo">Zeladora • Mãe de Santo</div>
+          <div class="mae-guia">Filha de Oyá, Guardiã desta Casa</div>
+        </div>
+      </div>
+      <div class="div-linha" style="margin:0.8rem 0"></div>
+      <div class="info-linha"><span class="info-chave">📞 Contato</span><span class="info-valor">(91) 9 9999-9999</span></div>
+      <div class="info-linha"><span class="info-chave">📍 Terreiro</span><span class="info-valor">Rua dos Encantados, 123</span></div>
+      <div class="info-linha"><span class="info-chave">🗓️ Fundação</span><span class="info-valor">15 anos de axé</span></div>
+      <div class="mae-frase" style="margin-top:0.8rem">
+        Guardiã desta casa sagrada há 15 anos, dedicada ao Tambor de Mina e aos Encantados. Mãe de todos os filhos, com amor e firmeza de Oyá.
+      </div>
+    </div>
+
+    <div class="secao-titulo">🎯 Projetos e Metas</div>
+    <div class="proj-item">
+      <div class="proj-icon">🏗️</div>
+      <div style="flex:1">
+        <div class="proj-nm">Reforma do Salão Principal</div>
+        <div class="proj-desc">Pintura, novo piso e iluminação para o salão de giras</div>
+        <div class="proj-prog"><div class="proj-barra" style="width:65%"></div></div>
+        <div class="proj-pct">65% concluído • Meta: Agosto 2025</div>
+      </div>
+    </div>
+    <div class="proj-item">
+      <div class="proj-icon">🥁</div>
+      <div style="flex:1">
+        <div class="proj-nm">Novos Tambores para a Casa</div>
+        <div class="proj-desc">Aquisição de 2 tambores novos para as giras</div>
+        <div class="proj-prog"><div class="proj-barra" style="width:30%"></div></div>
+        <div class="proj-pct">30% arrecadado • Meta: Outubro 2025</div>
+      </div>
+    </div>
+    <div class="proj-item">
+      <div class="proj-icon">📚</div>
+      <div style="flex:1">
+        <div class="proj-nm">Curso de Tambor de Mina</div>
+        <div class="proj-desc">Aulas de história e liturgia para novos filhos</div>
+        <div class="proj-prog"><div class="proj-barra" style="width:10%"></div></div>
+        <div class="proj-pct">Planejando • Início: Julho 2025</div>
+      </div>
+    </div>
+
+    <div class="secao-titulo">📜 Informações da Casa</div>
+    <div class="card">
+      <div class="card-titulo">🌟 Tradição</div>
+      <div class="info-linha"><span class="info-chave">Religião</span><span class="info-valor">Tambor de Mina</span></div>
+      <div class="info-linha"><span class="info-chave">Nação</span><span class="info-valor">Jêjê Nagô</span></div>
+      <div class="info-linha"><span class="info-chave">Entidades principais</span><span class="info-valor">Oyá e Ogum</span></div>
+      <div class="info-linha"><span class="info-chave">Total de filhos</span><span class="info-valor">12 filhos</span></div>
+      <div class="info-linha"><span class="info-chave">Mensalidade</span><span class="info-valor">R$ 30,00/mês</span></div>
+      <div class="info-linha"><span class="info-chave">Contribuição velas</span><span class="info-valor">1 caixa/mês</span></div>
+    </div>
+
+    <div style="padding:0 1rem; margin-top:0.5rem;" class="adm-only">
+      <button class="btn-secund">✏️ Editar Informações da Casa</button>
+    </div>
+  </div>
+
+  <!-- MURAL -->
+  <div class="tela" id="tela-mensagens">
+    <div style="padding:0.9rem 1rem 0; display:flex; justify-content:space-between; align-items:center;">
+      <div class="secao-titulo" style="padding:0">📢 Mural da Casa</div>
+      <button class="adm-only" style="display:none; background:var(--vermelho); color:white; border:none; border-radius:8px; padding:0.4rem 0.9rem; font-size:0.68rem; font-family:'Cinzel',serif; cursor:pointer; font-weight:700; letter-spacing:0.05em;" onclick="abrirNovaMensagem()">+ Nova</button>
+    </div>
+    <div style="height:0.5rem"></div>
+    <div id="lista-msgs"></div>
+  </div>
+
+  <!-- PERFIL -->
+  <div class="tela" id="tela-perfil">
+    <div class="perfil-banner">
+      <div class="pb-avatar" id="pb-av">🌪️</div>
+      <div class="pb-nome" id="pb-nome">Maria das Graças</div>
+      <div class="pb-guia" id="pb-guia">Filha de Oyá • 5 anos na casa</div>
+      <div class="pb-stats">
+        <div class="pb-stat"><div class="pb-stat-n">✓</div><div class="pb-stat-l">Mensalidade</div></div>
+        <div class="pb-stat"><div class="pb-stat-n">✓</div><div class="pb-stat-l">Velas</div></div>
+        <div class="pb-stat"><div class="pb-stat-n" id="pb-pres">47</div><div class="pb-stat-l">Presenças</div></div>
+        <div class="pb-stat"><div class="pb-stat-n" id="pb-anos">5</div><div class="pb-stat-l">Anos</div></div>
+      </div>
+    </div>
+
+    <div class="secao-titulo">🔮 Minhas Obrigações</div>
+    <div class="card">
+      <div class="card-titulo">📋 Próximas</div>
+      <div class="obrig-item obrig-urgente">
+        <div class="obrig-icon">⚠️</div>
+        <div><div class="obrig-nm">Obrigação de 6 meses</div><div class="obrig-data">Junho 2025 • Urgente</div></div>
+      </div>
+      <div class="obrig-item">
+        <div class="obrig-icon">🌿</div>
+        <div><div class="obrig-nm">Trabalho de Cabeça</div><div class="obrig-data">Agosto 2025 • Combinado com a Mãe</div></div>
+      </div>
+    </div>
+
+    <div class="secao-titulo">💌 Recados dos Guias</div>
+    <div class="card">
+      <div class="recado-box">
+        <div class="recado-de">⚡ Oyá Iansã — Gira 04/Mai/2025</div>
+        "Filha, mantenha sua força. Os ventos sopram a seu favor. Não recue diante das tempestades, pois você foi feita para atravessá-las."
+      </div>
+    </div>
+
+    <div class="secao-titulo">💰 Situação Financeira</div>
+    <div class="card">
+      <div class="card-titulo">Maio 2025</div>
+      <div class="info-linha"><span class="info-chave">Mensalidade (R$30,00)</span><span class="info-valor ok">✅ Paga</span></div>
+      <div class="info-linha"><span class="info-chave">Doação de velas</span><span class="info-valor ok">✅ Entregue</span></div>
+    </div>
+
+    <!-- ADM: painel de admin -->
+    <div class="adm-only secao-titulo" style="display:none">⚙️ Painel ADM</div>
+    <div class="card adm-only" style="display:none">
+      <div class="card-titulo">🔧 Administração</div>
+      <div class="info-linha"><span class="info-chave">Total de filhos cadastrados</span><span class="info-valor">12</span></div>
+      <div class="info-linha"><span class="info-chave">Mensalidades pendentes</span><span class="info-valor alert">4</span></div>
+      <div class="info-linha"><span class="info-chave">Velas pendentes</span><span class="info-valor pend">5</span></div>
+      <div class="info-linha"><span class="info-chave">Próximo evento</span><span class="info-valor">17/Mai</span></div>
+    </div>
+
+    <div style="padding:0 1rem; margin-top:0.5rem;">
+      <button class="btn-secund" onclick="fazerLogout()">Sair da Conta</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn ativo" id="nav-home" onclick="navegarPara('home')"><span class="ni">🏠</span>Início</button>
+    <button class="nav-btn" id="nav-filhos" onclick="navegarPara('filhos')"><span class="ni">👥</span>Filhos</button>
+    <button class="nav-btn" id="nav-calendario" onclick="navegarPara('calendario')"><span class="ni">📅</span>Agenda</button>
+    <button class="nav-btn" id="nav-mensagens" onclick="navegarPara('mensagens')"><span class="ni">📢</span>Mural</button>
+    <button class="nav-btn" id="nav-casa" onclick="navegarPara('casa')"><span class="ni">🏛️</span>Casa</button>
+  </nav>
+</div>
+
+<!-- ── MODAIS ── -->
+
+<!-- Modal: ver filho -->
+<div class="overlay" id="ov-filho">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-head" id="mh-filho"></div>
+    <div class="modal-body" id="mb-filho"></div>
+  </div>
+</div>
+
+<!-- Modal: add filho (ADM) -->
+<div class="overlay" id="ov-add-filho">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-titulo-bar">✨ Novo Filho de Santo<button class="modal-fechar" onclick="fecharOv('ov-add-filho')">✕</button></div>
+    <div class="form-wrap" style="margin-top:1rem">
+      <label class="f-label">Nome Completo</label>
+      <input class="f-input" id="af-nome" type="text" placeholder="Nome do filho de santo">
+      <label class="f-label">Guia / Entidade Principal</label>
+      <input class="f-input" id="af-guia" type="text" placeholder="Ex: Filha(o) de Oyá">
+      <label class="f-label">Telefone</label>
+      <input class="f-input" id="af-tel" type="tel" placeholder="(91) 9 9999-9999">
+      <label class="f-label">Cargo / Função</label>
+      <select class="f-select" id="af-cargo">
+        <option>Iyaô (novato)</option><option>Ebomi (veterano)</option>
+        <option>Ogã</option><option>Ekede</option><option>Alabê</option>
+      </select>
+      <label class="f-label">Obrigações / Observações</label>
+      <textarea class="f-textarea" id="af-obs" placeholder="Obrigações, notas..."></textarea>
+      <label class="f-label">Senha de acesso</label>
+      <input class="f-input" id="af-senha" type="text" placeholder="Senha para o filho entrar no app">
+      <button class="btn-salvar" onclick="salvarFilho()">✨ Salvar Filho de Santo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: add evento (ADM) -->
+<div class="overlay" id="ov-add-evento">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-titulo-bar">📅 Novo Evento<button class="modal-fechar" onclick="fecharOv('ov-add-evento')">✕</button></div>
+    <div class="form-wrap" style="margin-top:1rem">
+      <label class="f-label">Tipo</label>
+      <select class="f-select" id="ev-tipo">
+        <option value="gira">⚡ Gira</option><option value="festa">🌟 Festa</option>
+        <option value="obrigacao">🔮 Obrigação</option><option value="reuniao">💬 Reunião</option>
+      </select>
+      <label class="f-label">Nome do Evento</label>
+      <input class="f-input" id="ev-nome" type="text" placeholder="Ex: Gira de Oyá">
+      <label class="f-label">Data</label>
+      <input class="f-input" id="ev-data" type="date">
+      <label class="f-label">Horário</label>
+      <input class="f-input" id="ev-hora" type="time">
+      <label class="f-label">Local</label>
+      <input class="f-input" id="ev-local" type="text" placeholder="Ex: Terreiro da Casa">
+      <label class="f-label">O que os filhos devem levar (material)</label>
+      <textarea class="f-textarea" id="ev-material" placeholder="Ex: Roupa branca, velas, flores..."></textarea>
+      <label class="f-label">Descrição / Observações</label>
+      <textarea class="f-textarea" id="ev-desc" placeholder="Informações adicionais..."></textarea>
+      <button class="btn-salvar" onclick="salvarEvento()">📅 Adicionar ao Calendário</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: nova mensagem (ADM) -->
+<div class="overlay" id="ov-mensagem">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-titulo-bar">📢 Nova Mensagem<button class="modal-fechar" onclick="fecharOv('ov-mensagem')">✕</button></div>
+    <div class="form-wrap" style="margin-top:1rem">
+      <label class="f-label">Categoria</label>
+      <select class="f-select" id="ms-cat">
+        <option value="aviso">📌 Aviso</option>
+        <option value="esp">🔮 Espiritual / Recado de Guia</option>
+        <option value="geral">💬 Geral</option>
+      </select>
+      <label class="f-label">Título</label>
+      <input class="f-input" id="ms-titulo" type="text" placeholder="Assunto">
+      <label class="f-label">Mensagem</label>
+      <textarea class="f-textarea" id="ms-corpo" placeholder="Escreva..." style="height:110px"></textarea>
+      <button class="btn-salvar" onclick="salvarMensagem()">📢 Publicar no Mural</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: add recado guia (filho) -->
+<div class="overlay" id="ov-recado">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-titulo-bar">💌 Registrar Recado do Guia<button class="modal-fechar" onclick="fecharOv('ov-recado')">✕</button></div>
+    <div class="form-wrap" style="margin-top:1rem">
+      <label class="f-label">Guia / Entidade</label>
+      <input class="f-input" id="rc-guia" type="text" placeholder="Ex: Oyá Iansã">
+      <label class="f-label">Data da Gira</label>
+      <input class="f-input" id="rc-data" type="date">
+      <label class="f-label">Recado Recebido</label>
+      <textarea class="f-textarea" id="rc-texto" placeholder="O que o guia disse..." style="height:100px"></textarea>
+      <button class="btn-salvar" onclick="salvarRecado()">💌 Salvar Recado</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════ DADOS ═══════════
+const USUARIOS = {
+  mae:   { senha:'oya2025',  adm:true,  nome:'Mãe Iracilda de Oyá', guia:'Zeladora • Filha de Oyá', emoji:'🌹', id:0 },
+  maria: { senha:'filho123', adm:false, nome:'Maria das Graças',     guia:'Filha de Oyá • 5 anos',  emoji:'🌪️', id:1 },
+  joao:  { senha:'filho123', adm:false, nome:'João Batista',          guia:'Filho de Ogum • 6 anos', emoji:'⚔️', id:2 },
+};
+
+let usuarioLogado = null;
+let modoAdm = false;
+
+let filhos = [
+  { id:1, nome:'Maria das Graças', guia:'Filha de Oyá', cargo:'Ebomi', tel:'(91) 9 9999-0001', entrada:'2020-03', emoji:'🌪️', cor:'#B91C1C', mensalidade:true, velas:true, obrigacoes:'Obrigação de 6 meses em Junho 2025', recado:'Oyá disse: mantenha sua força, filha.', presencas:47 },
+  { id:2, nome:'João Batista',      guia:'Filho de Ogum', cargo:'Ogã',   tel:'(91) 9 9999-0002', entrada:'2019-08', emoji:'⚔️', cor:'#0D4A2A', mensalidade:true, velas:false, obrigacoes:'Sem obrigações próximas', recado:'', presencas:62 },
+  { id:3, nome:'Ana Paula Silva',   guia:'Filha de Iemanjá', cargo:'Iyaô', tel:'(91) 9 9999-0003', entrada:'2024-01', emoji:'🌊', cor:'#0B3D7A', mensalidade:false, velas:true, obrigacoes:'Obrigação de 1 ano em Jan 2025', recado:'Iemanjá: seja paciente, a jornada começa.', presencas:12 },
+  { id:4, nome:'Pedro Henrique',    guia:'Filho de Xangô', cargo:'Ebomi', tel:'(91) 9 9999-0004', entrada:'2018-05', emoji:'⚡', cor:'#7A3B00', mensalidade:true, velas:true, obrigacoes:'Renovação em Julho 2025', recado:'', presencas:89 },
+  { id:5, nome:'Francisca Lima',    guia:'Filha de Nanã', cargo:'Ekede', tel:'(91) 9 9999-0005', entrada:'2021-11', emoji:'🌺', cor:'#4A0080', mensalidade:false, velas:false, obrigacoes:'Pendências com obrigação de 3 anos', recado:'Nanã: respeite os ciclos.', presencas:31 },
+  { id:6, nome:'Carlos Eduardo',    guia:'Filho de Oxóssi', cargo:'Alabê', tel:'(91) 9 9999-0006', entrada:'2022-03', emoji:'🏹', cor:'#0D6A2A', mensalidade:true, velas:true, obrigacoes:'Sem obrigações próximas', recado:'', presencas:28 },
+];
+
+let eventos = [
+  { tipo:'gira',      nome:'Gira de Ogum • Festa do Guerreiro',  data:'04/Mai', hora:'20h00', local:'Terreiro', material:'Roupa branca\nVelas brancas (2)\nFerramenta de Ogum (opcional)', desc:'', presentes:['Maria','João','Ana'] },
+  { tipo:'festa',     nome:'Festa de Oyá • Aniversário da Casa',  data:'17/Mai', hora:'18h00', local:'Terreiro', material:'Roupa vermelha ou branca\nFlores roxas/vermelhas\nVinho tinto (oferenda)', desc:'', presentes:['Maria','Pedro'] },
+  { tipo:'obrigacao', nome:'Obrigação de 3 Anos • Filho José',    data:'24/Mai', hora:'10h00', local:'Interno', material:'Material a combinar com a Mãe', desc:'', presentes:[] },
+  { tipo:'reuniao',   nome:'Reunião da Diretoria da Casa',         data:'11/Mai', hora:'15h00', local:'Casa da Mãe', material:'', desc:'', presentes:['João','Maria','Pedro'] },
+];
+
+let mensagens = [
+  { autor:'🌹 Mãe Iracilda', data:'14 mai', titulo:'Confirmação da Festa de Oyá', corpo:'Filhos, confirmamos a grande festa para o dia 17. Todos devem trazer roupa branca e chegar às 17h30 para ajudar na organização...', cat:'aviso' },
+  { autor:'⚡ Padrinho Raimundo', data:'12 mai', titulo:'Recado de Ogum Rompe-Mato', corpo:'Na última gira, Ogum Rompe-Mato passou recado para os filhos da casa: mantenham a força e a fé...', cat:'esp' },
+  { autor:'🏠 Casa', data:'08 mai', titulo:'Mensalidades de Maio', corpo:'Lembramos que as mensalidades de maio vencem no dia 10. R$30,00 para cada filho...', cat:'geral' },
+];
+
+// ═══════════ LOGIN ═══════════
+function fazerLogin() {
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  const s = document.getElementById('login-pass').value.trim();
+  if (!USUARIOS[u] || USUARIOS[u].senha !== s) {
+    toast('⚠️ Usuário ou senha incorretos'); return;
+  }
+  usuarioLogado = { ...USUARIOS[u], login: u };
+  modoAdm = usuarioLogado.adm;
+  iniciarApp();
+}
+
+function iniciarApp() {
+  document.getElementById('tela-login').classList.remove('ativo');
+  document.getElementById('app').classList.add('ativo');
+
+  // aplicar modo
+  if (modoAdm) {
+    document.getElementById('app').classList.add('modo-adm');
+    document.getElementById('adm-badge').style.display = 'inline-block';
+    // mostrar botões ADM
+    document.querySelectorAll('.adm-only').forEach(el => el.style.display = '');
+    // botão nova mensagem
+    document.querySelector('[onclick="abrirNovaMensagem()"]').style.display = 'inline-block';
+    document.querySelector('[onclick="abrirAddFilho()"]').style.display = 'flex';
+  }
+
+  // perfil
+  const u = usuarioLogado;
+  document.getElementById('tb-inicial').textContent = u.nome.charAt(0);
+  document.getElementById('saud-nome').textContent = u.nome.split(' ')[0];
+  document.getElementById('pb-av').textContent = u.emoji;
+  document.getElementById('pb-nome').textContent = u.nome;
+  document.getElementById('pb-guia').textContent = u.guia;
+
+  renderFilhos(filhos);
+  renderEventos();
+  renderMensagens();
+}
+
+function fazerLogout() {
+  usuarioLogado = null; modoAdm = false;
+  document.getElementById('app').classList.remove('ativo','modo-adm');
+  document.getElementById('tela-login').classList.add('ativo');
+  document.querySelectorAll('.adm-only').forEach(el => el.style.display = 'none');
+}
+
+// ═══════════ NAV ═══════════
+function navegarPara(t) {
+  document.querySelectorAll('.tela').forEach(x => x.classList.remove('ativa'));
+  document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('ativo'));
+  document.getElementById('tela-'+t).classList.add('ativa');
+  const nb = document.getElementById('nav-'+t);
+  if (nb) nb.classList.add('ativo');
+  window.scrollTo(0,0);
+}
+
+// ═══════════ FILHOS ═══════════
+function renderFilhos(lista) {
+  const c = document.getElementById('lista-filhos');
+  document.getElementById('titulo-filhos').textContent = `👥 Filhos da Casa (${lista.length})`;
+  c.innerHTML = lista.map(f => `
+    <div class="filho-card" onclick="abrirFilho(${f.id})">
+      <div class="fc-avatar" style="background:${f.cor}18;border-color:${f.cor}33">${f.emoji}</div>
+      <div style="flex:1;min-width:0">
+        <div class="fc-nome">${f.nome}</div>
+        <div class="fc-guia">${f.guia} • ${f.cargo}</div>
+        <div class="fc-badges">
+          ${f.mensalidade ? '<span class="badge b-ok">💰 Mensalidade OK</span>' : '<span class="badge b-alert">💰 Pend.</span>'}
+          ${f.velas       ? '<span class="badge b-ok">🕯️ Vela OK</span>'        : '<span class="badge b-pend">🕯️ Vela Pend.</span>'}
+        </div>
+      </div>
+      <div class="fc-seta">›</div>
+    </div>`).join('');
+}
+
+function filtrarFilhos(q) {
+  renderFilhos(filhos.filter(f => f.nome.toLowerCase().includes(q.toLowerCase()) || f.guia.toLowerCase().includes(q.toLowerCase())));
+}
+
+function abrirFilho(id) {
+  const f = filhos.find(x => x.id === id);
+  if (!f) return;
+  const eh_proprio = usuarioLogado && !modoAdm && usuarioLogado.nome === f.nome;
+
+  document.getElementById('mh-filho').innerHTML = `
+    <div class="modal-av" style="background:${f.cor}22;border-color:${f.cor}44">${f.emoji}</div>
+    <div><div class="modal-nm">${f.nome}</div><div class="modal-gua">${f.guia} • ${f.cargo}</div></div>
+    <button class="modal-fechar" onclick="fecharOv('ov-filho')">✕</button>`;
+
+  let html = `
+    <div class="modal-sec">
+      <div class="modal-sec-titulo">💰 Financeiro</div>
+      <div class="info-linha">
+        <span class="info-chave">Mensalidade R$30</span>
+        ${modoAdm
+          ? `<button class="toggle-btn" onclick="toggleMens(${id})">${f.mensalidade?'✅':'❌'}</button>`
+          : `<span class="info-valor ${f.mensalidade?'ok':'alert'}">${f.mensalidade?'✅ Paga':'❌ Pendente'}</span>`}
+      </div>
+      <div class="info-linha">
+        <span class="info-chave">Doação de velas</span>
+        ${modoAdm
+          ? `<button class="toggle-btn" onclick="toggleVela(${id})">${f.velas?'✅':'❌'}</button>`
+          : `<span class="info-valor ${f.velas?'ok':'pend'}">${f.velas?'✅ Entregue':'⏳ Pendente'}</span>`}
+      </div>
+      <div class="info-linha"><span class="info-chave">Presenças nas giras</span><span class="info-valor ok">${f.presencas}</span></div>
+    </div>
+    <div class="modal-sec">
+      <div class="modal-sec-titulo">📋 Informações</div>
+      <div class="info-linha"><span class="info-chave">Cargo</span><span class="info-valor">${f.cargo}</span></div>
+      <div class="info-linha"><span class="info-chave">Telefone</span><span class="info-valor">${f.tel}</span></div>
+      <div class="info-linha"><span class="info-chave">Na casa desde</span><span class="info-valor">${f.entrada}</span></div>
+    </div>
+    <div class="modal-sec">
+      <div class="modal-sec-titulo">🔮 Obrigações e Trabalhos</div>
+      <div style="font-size:0.82rem;color:${f.obrigacoes.includes('Pend')||f.obrigacoes.includes('Urgente')?'#D97706':'#57534E'};line-height:1.5">${f.obrigacoes}</div>
+      ${(modoAdm||eh_proprio) ? `<button class="btn-secund" style="margin-top:0.7rem" onclick="editarObrig(${id})">✏️ Editar obrigações</button>` : ''}
+    </div>`;
+
+  if (f.recado) {
+    html += `<div class="modal-sec"><div class="modal-sec-titulo">💌 Recado dos Guias</div><div class="recado-box">${f.recado}</div></div>`;
+  }
+  if (eh_proprio || modoAdm) {
+    html += `<div class="modal-sec"><div class="modal-sec-titulo">💌 Registrar Recado</div><button class="btn-secund" onclick="fecharOv('ov-filho');document.getElementById('ov-recado').classList.add('aberto')">+ Adicionar recado de guia</button></div>`;
+  }
+  if (modoAdm) {
+    html += `<div class="modal-sec" style="margin-bottom:1rem"><div class="modal-sec-titulo">⚙️ Ações ADM</div><button class="btn-secund" onclick="excluirFilho(${id})">🗑️ Remover filho de santo</button></div>`;
+  }
+
+  document.getElementById('mb-filho').innerHTML = html;
+  document.getElementById('ov-filho').classList.add('aberto');
+}
+
+function toggleMens(id) {
+  const f = filhos.find(x=>x.id===id); f.mensalidade=!f.mensalidade;
+  toast(f.mensalidade?'✅ Mensalidade marcada':'❌ Mensalidade desmarcada');
+  abrirFilho(id); renderFilhos(filhos);
+}
+function toggleVela(id) {
+  const f = filhos.find(x=>x.id===id); f.velas=!f.velas;
+  toast(f.velas?'🕯️ Velas entregues':'❌ Velas desmarcadas');
+  abrirFilho(id); renderFilhos(filhos);
+}
+function excluirFilho(id) {
+  filhos = filhos.filter(x=>x.id!==id);
+  renderFilhos(filhos); fecharOv('ov-filho');
+  toast('🗑️ Filho removido da casa');
+}
+function editarObrig(id) {
+  const f = filhos.find(x=>x.id===id);
+  const nova = prompt('Editar obrigações:', f.obrigacoes);
+  if (nova !== null) { f.obrigacoes = nova; toast('✅ Obrigações atualizadas'); abrirFilho(id); }
+}
+
+function abrirAddFilho() { document.getElementById('ov-add-filho').classList.add('aberto'); }
+function salvarFilho() {
+  const nome = document.getElementById('af-nome').value.trim();
+  if (!nome) { toast('⚠️ Informe o nome'); return; }
+  filhos.push({
+    id: Date.now(), nome, guia: document.getElementById('af-guia').value||'Guia a definir',
+    cargo: document.getElementById('af-cargo').value||'Iyaô',
+    tel: document.getElementById('af-tel').value||'—',
+    entrada: new Date().toISOString().slice(0,7),
+    emoji:'✨', cor:'#B91C1C', mensalidade:false, velas:false,
+    obrigacoes: document.getElementById('af-obs').value||'Sem obrigações cadastradas',
+    recado:'', presencas:0
+  });
+  renderFilhos(filhos); fecharOv('ov-add-filho');
+  toast('✨ Filho de Santo adicionado!');
+  ['af-nome','af-guia','af-tel','af-obs','af-senha'].forEach(i => document.getElementById(i).value='');
+}
+
+// ═══════════ EVENTOS ═══════════
+const TIPO_LABEL = { gira:'⚡ Gira', festa:'🌟 Festa', obrigacao:'🔮 Obrigação', reuniao:'💬 Reunião' };
+
+function renderEventos() {
+  document.getElementById('lista-eventos').innerHTML = eventos.map((e,i) => `
+    <div class="ev-item ${e.tipo}">
+      <div class="ev-tipo">${TIPO_LABEL[e.tipo]||e.tipo}</div>
+      <div class="ev-nm">${e.nome}</div>
+      <div class="ev-inf">📅 ${e.data} • ${e.hora} • ${e.local}</div>
+      ${e.material ? `<div class="ev-mat-box"><div class="ev-mat-titulo">🛍️ O que levar</div><div class="ev-mat-lista">${e.material.replace(/\n/g,'<br>')}</div></div>` : ''}
+      ${e.presentes.length ? `<div class="presencas-wrap">${e.presentes.map(p=>`<span class="pr-tag">✓ ${p}</span>`).join('')}</div>` : ''}
+      <div style="margin-top:0.6rem;display:flex;gap:0.5rem">
+        <button style="flex:1;padding:0.45rem;border-radius:8px;border:none;background:var(--vermelho);color:white;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif" onclick="confirmarEv(${i},this)">✓ Confirmar</button>
+        ${modoAdm ? `<button style="padding:0.45rem 0.7rem;border-radius:8px;border:1px solid rgba(180,83,9,0.2);background:white;color:var(--ouro);font-size:0.7rem;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700" onclick="excluirEvento(${i})">🗑️</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function confirmarEv(i, btn) {
+  const nome = usuarioLogado ? usuarioLogado.nome.split(' ')[0] : 'Você';
+  if (!eventos[i].presentes.includes(nome)) eventos[i].presentes.push(nome);
+  btn.textContent='✓ Confirmado!'; btn.style.background='#16A34A'; btn.disabled=true;
+  renderEventos(); toast('🙏 Presença confirmada! Axé!');
+}
+function excluirEvento(i) {
+  eventos.splice(i,1); renderEventos(); toast('🗑️ Evento removido');
+}
+
+function abrirAddEvento() { document.getElementById('ov-add-evento').classList.add('aberto'); }
+function salvarEvento() {
+  const nome = document.getElementById('ev-nome').value.trim();
+  if (!nome) { toast('⚠️ Informe o nome'); return; }
+  const data = document.getElementById('ev-data').value;
+  eventos.unshift({
+    tipo: document.getElementById('ev-tipo').value,
+    nome,
+    data: data ? new Date(data+'T12:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}) : '—',
+    hora: document.getElementById('ev-hora').value||'—',
+    local: document.getElementById('ev-local').value||'Terreiro',
+    material: document.getElementById('ev-material').value||'',
+    desc: document.getElementById('ev-desc').value||'',
+    presentes: []
+  });
+  renderEventos(); fecharOv('ov-add-evento'); toast('📅 Evento adicionado!');
+}
+
+// ═══════════ MENSAGENS ═══════════
+const CAT_CLASSE = { aviso:'mt-aviso', esp:'mt-esp', geral:'mt-geral' };
+const CAT_LABEL  = { aviso:'📌 Aviso', esp:'🔮 Espiritual', geral:'💬 Geral' };
+
+function renderMensagens() {
+  document.getElementById('lista-msgs').innerHTML = mensagens.map((m,i) => `
+    <div class="msg-card">
+      <div class="msg-top"><div class="msg-autor">${m.autor}</div><div class="msg-data">${m.data}</div></div>
+      <div class="msg-titulo">${m.titulo}</div>
+      <div class="msg-prev">${m.corpo.substring(0,120)}...</div>
+      <span class="msg-tag ${CAT_CLASSE[m.cat]||'mt-geral'}">${CAT_LABEL[m.cat]||m.cat}</span>
+      ${modoAdm ? `<button onclick="excluirMsg(${i})" style="float:right;background:none;border:none;color:rgba(185,28,28,0.4);cursor:pointer;font-size:0.8rem;margin-top:-1.2rem">✕</button>` : ''}
+    </div>`).join('');
+}
+
+function excluirMsg(i) { mensagens.splice(i,1); renderMensagens(); toast('🗑️ Mensagem removida'); }
+function abrirNovaMensagem() { document.getElementById('ov-mensagem').classList.add('aberto'); }
+function salvarMensagem() {
+  const titulo = document.getElementById('ms-titulo').value.trim();
+  if (!titulo) { toast('⚠️ Informe o título'); return; }
+  mensagens.unshift({
+    autor: '🌹 ' + usuarioLogado.nome,
+    data: 'agora',
+    titulo,
+    corpo: document.getElementById('ms-corpo').value,
+    cat: document.getElementById('ms-cat').value
+  });
+  renderMensagens(); fecharOv('ov-mensagem'); toast('📢 Mensagem publicada!');
+  ['ms-titulo','ms-corpo'].forEach(i=>document.getElementById(i).value='');
+}
+
+// ═══════════ RECADO ═══════════
+function salvarRecado() {
+  const guia  = document.getElementById('rc-guia').value.trim();
+  const texto = document.getElementById('rc-texto').value.trim();
+  const data  = document.getElementById('rc-data').value;
+  if (!texto) { toast('⚠️ Escreva o recado'); return; }
+  if (usuarioLogado) {
+    const f = filhos.find(x => x.nome === usuarioLogado.nome);
+    if (f) {
+      const dt = data ? new Date(data+'T12:00').toLocaleDateString('pt-BR') : 'data atual';
+      f.recado = (guia||'Guia') + ': ' + texto + ' — ' + dt;
+    }
+  }
+  fecharOv('ov-recado'); toast('💌 Recado salvo!');
+  ['rc-guia','rc-data','rc-texto'].forEach(i=>document.getElementById(i).value='');
+}
+
+// ═══════════ HOME CONFIRMAR ═══════════
+function confirmarPresenca(btn) {
+  btn.textContent='✓ Confirmado!'; btn.style.background='#15803D'; btn.disabled=true;
+  toast('🙏 Presença confirmada! Axé!');
+}
+
+// ═══════════ UTILS ═══════════
+function fecharOv(id) { document.getElementById(id).classList.remove('aberto'); }
+function toast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg;
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+// Fechar overlay clicando fora
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('aberto'); });
+});
+
+// ═══════════ SPLASH → LOGIN ═══════════
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('tela-login').classList.add('ativo');
+  }, 2300);
+});
+</script>
+</body>
+</html>
